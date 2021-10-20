@@ -1,0 +1,6 @@
+Checks: '*,-fuchsia-*,-google-*,-zircon-*,-abseil-*,-modernize-use-trailing-return-type,-misc-non-private-member-variables-in-classes,
+-llvmlibc-callee-namespace, -altera-id-dependent-backward-branch, -readability-redundant-access-specifiers, -altera-unroll-loops,
+-*-uppercase-literal-suffix'
+WarningsAsErrors: '*'
+HeaderFilterRegex: ''
+FormatStyle: none
