@@ -5,8 +5,8 @@
 #ifndef PONGLION_GAME_HPP
 #define PONGLION_GAME_HPP
 
-#include "Paddle.hpp"
 #include "Ball.hpp"
+#include "Paddle.hpp"
 #include <SFML/Graphics.hpp>
 
 class Game
@@ -16,25 +16,24 @@ public:
     void run();
 
 public:
-    static constexpr unsigned int width  = 800;
-    static constexpr unsigned int height = 600;
+    static constexpr uint16_t WIDTH  = 800;
+    static constexpr uint16_t HEIGHT = 600;
 
 private:
-    constexpr void handleInputs();
+    void handleInputs();
     void handleEvents();
     void update(sf::Time dTime);
     void render();
 
 private:
     sf::RenderWindow _window;
-    sf::Event _event;
+    sf::Event _event{};
 
     Ball _ball;
     Paddle _paddle;
     Paddle _botPaddle;
 
-    static constexpr float _paddlePosX = 12.5f;
-    static constexpr float _paddlePosY = static_cast<float>(height) / 2 + 50.f;
+    static constexpr uint8_t FRAME_LIMIT = 60;
 };
 
 

@@ -15,6 +15,9 @@ public:
     void launchBall();
 
 public:
+    static constexpr int16_t STARTING_X = 300;
+    static constexpr int16_t STARTING_Y = 300;
+
 private:
     bool isCollidingWall() const;
     bool isCollidingPad(const sf::Vector2f& pad, const sf::Vector2f& bot) const;

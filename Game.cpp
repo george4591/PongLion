@@ -6,11 +6,12 @@
 #include "spdlog/spdlog.h"
 
 Game::Game()
-  : _paddle({ _paddlePosX, _paddlePosY }), _botPaddle({ width - _paddlePosX - Paddle::width, _paddlePosY }),
-    _ball({ 300, 300 })
+  : _paddle({ Paddle::STARTING_X, Paddle::STARTING_Y }),
+    _botPaddle({ WIDTH - Paddle::STARTING_X - Paddle::width, Paddle::STARTING_Y }),
+    _ball({ Ball::STARTING_X, Ball::STARTING_Y })
 {
-    _window.create(sf::VideoMode(width, height), "Pongu\'");
-    _window.setFramerateLimit(60);
+    _window.create(sf::VideoMode(WIDTH, HEIGHT), "Pongu\'");
+    _window.setFramerateLimit(FRAME_LIMIT);
     _window.setMouseCursorVisible(false);
     _window.setMouseCursorGrabbed(true);
 }
@@ -27,7 +28,7 @@ void Game::run()
     }
 }
 
-constexpr void Game::handleInputs()
+void Game::handleInputs()
 {
     if (_event.type == sf::Event::KeyPressed) {
         switch (_event.key.code) {
@@ -43,28 +44,30 @@ constexpr void Game::handleInputs()
             break;
         }
     } else if (_event.type == sf::Event::MouseMoved) {
-        _paddle.move({ static_cast<int>(_paddlePosX), sf::Mouse::getPosition(_window).y });
-        _botPaddle.move({ static_cast<int>(_botPaddle.getPosition().x), sf::Mouse::getPosition(_window).y });
+        const auto mousePos = sf::Mouse::getPosition(_window);
+        _paddle.move(mousePos.y);
+        _botPaddle.move(mousePos.y);
     }
 }
 
 void Game::handleEvents()
 {
+    using ev = sf::Event;
     while (_window.pollEvent(_event)) {
         switch (_event.type) {
-        case sf::Event::Closed:
+        case ev::Closed:
             _window.close();
             break;
-        case sf::Event::MouseMoved:
-        case sf::Event::KeyPressed:
+        case ev::MouseMoved:
+        case ev::KeyPressed:
             handleInputs();
             break;
-        case sf::Event::KeyReleased:
-        case sf::Event::TextEntered:
+        case ev::KeyReleased:
+        case ev::TextEntered:
             break;
-        case sf::Event::MouseButtonPressed:
+        case ev::MouseButtonPressed:
             break;
-        case sf::Event::MouseButtonReleased:
+        case ev::MouseButtonReleased:
             break;
         default:
             // spdlog::info("Unhandled event");

@@ -8,8 +8,17 @@ Paddle::Paddle(sf::Vector2f pos)
     setSize({ width, height });
     setPosition(pos.x, pos.y);
 }
-void Paddle::move(sf::Vector2i pos)
+void Paddle::move(int y)
 {
-    if (!isColliding(pos.y)) { setPosition(static_cast<float>(pos.x), static_cast<float>(pos.y)); }
+    // TODO: make this work for the bot without having 2 different calls(if it works?)
+    if (!isColliding(y)) {
+        if (getPosition().x == STARTING_X) {
+            setPosition(STARTING_X, static_cast<float>(y));
+        } else {
+            setPosition(getPosition().x, static_cast<float>(y));
+        }
+    }
 }
+
+// FIXME: remove the magic numbers
 constexpr bool Paddle::isColliding(unsigned int y) const { return y + height >= 585 || y - 0.125 * height < 0; }

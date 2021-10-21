@@ -22,18 +22,20 @@ bool Ball::isCollidingPad(const sf::Vector2f& pad, const sf::Vector2f& bot) cons
            && (getPosition().y >= pad.y && getPosition().y <= pad.y + 75);
 }
 
-constexpr float toRad(float angle) { return angle * std::numbers::pi_v<float> / 180.0f; }
 
 void Ball::launchBall()
 {
+    using randomGenerator = std::mt19937;
     std::random_device rd;
-    std::mt19937 gen(rd());
+    randomGenerator gen(rd());
 
     std::uniform_int_distribution dir(-1, 1);
     std::uniform_real_distribution<float> ang(0, 60);
 
     float direction = dir(gen);
-    float angle     = toRad(ang(gen));
+
+    auto toRad  = [&ang, &gen]() { return ang(gen) * std::numbers::pi_v<float> / 180.0f; };
+    float angle = toRad();
 
     dx = direction * speed * std::cosf(angle);
     dy = speed * std::sinf(angle);
@@ -48,7 +50,7 @@ void Ball::checkCollisions(const sf::Vector2f& pad, const sf::Vector2f& bot)
         dx *= -1;
     } else {
         if (isOutOfBounds()) {
-            setPosition(400, 300);
+            setPosition(STARTING_X, STARTING_Y);
             status = Status::NOT_LAUNCHED;
         }
     }
@@ -56,7 +58,8 @@ void Ball::checkCollisions(const sf::Vector2f& pad, const sf::Vector2f& bot)
 
 void Ball::move(const sf::Vector2f& pad, const sf::Vector2f& bot)
 {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && status == Status::NOT_LAUNCHED) { launchBall(); }
+    using kb = sf::Keyboard;
+    if (kb::isKeyPressed(kb::Space) && status == Status::NOT_LAUNCHED) { launchBall(); }
 
     if (status == Status::LAUNCHED) {
         checkCollisions(pad, bot);
